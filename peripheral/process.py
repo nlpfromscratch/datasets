@@ -15,21 +15,17 @@ for file_path in file_list:
 # Split the shuffled data into 70% training and 30% testing using sklearn
 train, test = train_test_split(data, test_size=0.3, random_state=42)
 
-# Full
-f = open('processed/all.csv', 'w')
-f.write('text\n')
-f.writelines(data)
-f.close()
+# Make dataframes
+full_df = pd.DataFrame(data, columns=['text'])
+train_df = pd.DataFrame(train, columns=['text'])
+test_df = pd.DataFrame(test, columns=['text'])
 
-# Train
-f = open('processed/train.csv', 'w')
-f.write('text\n')
-f.writelines(train)
-f.close()
+# Remove newlines
+full_df['text'] = full_df['text'].str.replace('\n','')
+train_df['text'] = train_df['text'].str.replace('\n','')
+test_df['text'] = test_df['text'].str.replace('\n','')
 
-# Test
-f = open('processed/test.csv', 'w')
-f.write('text\n')
-f.writelines(test)
-f.close()
-
+# Write out
+full_df.to_csv('processed/all.csv', sep='\t', index=False, quoting=csv.QUOTE_ALL)
+train_df.to_csv('processed/train.csv', sep='\t', index=False, quoting=csv.QUOTE_ALL)
+test_df.to_csv('processed/test.csv', sep='\t', index=False, quoting=csv.QUOTE_ALL)
